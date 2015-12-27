@@ -1,5 +1,5 @@
 /*
-SparkFun Inventor's Kit 
+SparkFun Inventor's Kit
 Example sketch 11
 
 BUZZER
@@ -8,7 +8,7 @@ BUZZER
 
   The buzzer in your Inventor's Kit is an electromechanical
   component you can use to make noise. Inside the buzzer is a
-  coil of wire and a small magnet. When current flows through 
+  coil of wire and a small magnet. When current flows through
   the coil, it becomes magnetized and pulls towards the magnet,
   creating a tiny "click". When you do this thousands of times
   per second, you create tones.
@@ -60,17 +60,20 @@ and returns the corresponding frequency from this table:
 For more information, see http://arduino.cc/en/Tutorial/Tone
 */
 
+// include the library code:
+#include <LiquidCrystal.h>
+
 const int buzzerPin = 9;
 const int ledPin = 13;
 
-const int buttonPin = 2; 
+const int buttonPin = 7;
 
-int buttonState = 0;  
+int buttonState = 0;
 
 // We'll set up an array with the notes we want to play
 // change these values to make different songs!
 
-// Length must equal the total number of notes and spaces 
+// Length must equal the total number of notes and spaces
 
 const int songLength = 18;
 
@@ -90,20 +93,28 @@ int beats[] = {1,1,1,1,1,1,4,4,2,1,1,1,1,1,1,4,4,2};
 
 int tempo = 150;
 
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-void setup() 
+void setup()
 {
   Serial.begin(9600);
   pinMode(buzzerPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
   pinMode(buttonPin, INPUT);
+
+  lcd.begin(16, 2);
+  lcd.print("hello, world!");
 }
 
 int played = 0;
 
-void loop() 
+void loop()
 {
   int i, duration;
+
+  lcd.setCursor(0, 1);
+  lcd.print(millis() / 1000);
 
   buttonState = digitalRead(buttonPin);
   Serial.print(buttonState);
@@ -116,16 +127,18 @@ void loop()
 
   // check if the pushbutton is pressed.
   // if it is, the buttonState is HIGH:
+//  int skip = 0;
   if (played == 0 && buttonState == HIGH) {
     // turn LED on:
     digitalWrite(ledPin, HIGH);
     played = 1;
 
-    for (i = 0; i < songLength; i++) // step through the song arrays
+//    for (i = 0; i < songLength; i++) // step through the song arrays
+    for (i = 0; i < 3; i++) // step through the song arrays
   {
     duration = beats[i] * tempo;  // length of note/rest in ms
 
-    if (notes[i] == ' ')          // is this a rest? 
+    if (notes[i] == ' ')          // is this a rest?
     {
       delay(duration);            // then pause for a moment
     }
@@ -136,13 +149,13 @@ void loop()
     }
     delay(tempo/10);              // brief pause between notes
   }
-  
+
   } else {
     // turn LED off:
     digitalWrite(ledPin, LOW);
   }
 
-  
+
 
   // We only want to play the song once, so we'll pause forever:
 //  while(true){}
@@ -151,7 +164,7 @@ void loop()
 }
 
 
-int frequency(char note) 
+int frequency(char note)
 {
   // This function takes a note character (a-g), and returns the
   // corresponding frequency in Hz for the tone() function.
@@ -183,4 +196,3 @@ int frequency(char note)
   return(0);  // We looked through everything and didn't find it,
               // but we still need to return a value, so return 0.
 }
-
