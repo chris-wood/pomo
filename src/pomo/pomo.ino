@@ -13,6 +13,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 // State of the press button
 int buttonState = 0;
+int lastButtonState = 0;
 
 const int songLength = 7;
 char startNotes[] = "abcdefg";
@@ -196,7 +197,8 @@ loop()
   
   // check if the pushbutton is pressed.
   // if it is, the buttonState is HIGH:
-  if (state.inPomo == false && buttonState == HIGH) {
+  if (state.inPomo == false && buttonState != lastButtonState) {
+    lastButtonState = buttonState;
     lcd.setCursor(8, 0);
     lcd.print("[*LIVE*]");
     lcd.setCursor(0, 1);
@@ -213,8 +215,8 @@ loop()
     int current = state.startTime;
     int timeElapsed = 0;
     int endTime = state.endTime;
-    while (current < endTime) {
-      delay(100);
+    while (current < endTime) { // wait for the time to expire
+      delay(100); 
       timeElapsed = (millis() / 1000) - state.startTime;
       lcd.setCursor(11, 1);
       lcd.print(state.timeLeft - timeElapsed);
