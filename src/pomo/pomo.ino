@@ -21,7 +21,7 @@ char endNotes[] = "gfedcba";
 char startBreakNotes[] = "agagaga";
 char endBreakNotes[] = "gagagag";
 int beats[] = {4,4,2,2,1,1,1};
-int tempo = 150;
+int tempo = 100;
 
 struct PomoStats {
   int numPomos;
@@ -119,7 +119,7 @@ setup()
   // Configure GPIO
   pinMode(buzzerPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
-  pinMode(buttonPin, INPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
 
   // Configure the LCD
   lcd.begin(16, 2);
@@ -131,7 +131,7 @@ setup()
   state.timeLeft = 0;
   pomoStats.numPomos = 0;
   pomoStats.pomoTime = 4; // 1500
-  pomoStats.pomoBlockLength = 1;
+  pomoStats.pomoBlockLength = 1000;
   pomoStats.pomoBlockBreakTime = 3; // 300
 }
 
@@ -158,6 +158,7 @@ stopPomo()
   
   playEndTune();
   pomoStats.numPomos++;
+  Serial.println(pomoStats.numPomos);
   if (pomoStats.numPomos % pomoStats.pomoBlockLength != 0) {
     state.inPomo = false;
     return false;
@@ -179,8 +180,17 @@ startPomo()
 void 
 clearTime()
 {
+  lcd.setCursor(6, 1);
+   lcd.print("Time: ");
   lcd.setCursor(11, 1);
   lcd.print("     ");
+}
+
+void printNumber()
+{
+  lcd.setCursor(0, 1);
+  lcd.print("NUM=");
+  lcd.print(pomoStats.numPomos);
 }
 
 void 
@@ -188,24 +198,19 @@ loop()
 {
   lcd.setCursor(8, 0);
   lcd.print("[PAUSED]");
-  lcd.setCursor(0, 1);
-  lcd.print("NUM=");
+  printNumber();
   clearTime();
-  lcd.print(pomoStats.numPomos);
     
   buttonState = digitalRead(buttonPin);
-  
+//  Serial.println(buttonState);
+
   // check if the pushbutton is pressed.
   // if it is, the buttonState is HIGH:
-  if (state.inPomo == false && buttonState != lastButtonState) {
+  if (state.inPomo == false && buttonState == LOW) {
     lastButtonState = buttonState;
     lcd.setCursor(8, 0);
     lcd.print("[*LIVE*]");
-    lcd.setCursor(0, 1);
-    lcd.print("NUM=");
-    lcd.print(pomoStats.numPomos);
-    lcd.setCursor(6, 1);
-    lcd.print("Time: ");
+    printNumber();
     clearTime();
     digitalWrite(ledPin, HIGH);
     
