@@ -225,7 +225,6 @@ loop()
       timeElapsed = (millis() / 1000) - state.startTime;
       lcd.setCursor(11, 1);
       lcd.print(state.timeLeft - timeElapsed);
-      lcd.print("s");
       
       current = millis() / 1000;
     }
@@ -250,7 +249,6 @@ loop()
         timeElapsed = (millis() / 1000) - state.startTime;
         lcd.setCursor(11, 1);
         lcd.print(state.timeLeft - timeElapsed);
-        lcd.print("s");
       
         current = millis() / 1000;
       }
