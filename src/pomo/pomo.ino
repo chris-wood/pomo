@@ -32,9 +32,9 @@ struct PomoStats {
 
 struct State {
   bool inPomo;
-  int timeLeft;
-  int startTime;
-  int endTime;
+  long timeLeft;
+  long startTime;
+  long endTime;
 };
 
 // 25min = 1,500,000ms
@@ -130,9 +130,9 @@ setup()
   state.inPomo = false;
   state.timeLeft = 0;
   pomoStats.numPomos = 0;
-  pomoStats.pomoTime = 4; // 1500
-  pomoStats.pomoBlockLength = 1000;
-  pomoStats.pomoBlockBreakTime = 3; // 300
+  pomoStats.pomoTime = 1500;
+  pomoStats.pomoBlockLength = 4;
+  pomoStats.pomoBlockBreakTime = 300;
 }
 
 void 
