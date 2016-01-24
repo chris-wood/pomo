@@ -181,7 +181,7 @@ void
 clearTime()
 {
   lcd.setCursor(6, 1);
-   lcd.print("Time: ");
+  lcd.print("Time: ");
   lcd.setCursor(11, 1);
   lcd.print("     ");
 }
@@ -202,7 +202,6 @@ loop()
   clearTime();
     
   buttonState = digitalRead(buttonPin);
-//  Serial.println(buttonState);
 
   // check if the pushbutton is pressed.
   // if it is, the buttonState is HIGH:
@@ -217,9 +216,9 @@ loop()
     Serial.println("START POMO");
 
     startPomo();
-    int current = state.startTime;
-    int timeElapsed = 0;
-    int endTime = state.endTime;
+    long current = state.startTime;
+    long timeElapsed = 0;
+    long endTime = state.endTime;
     while (current < endTime) { // wait for the time to expire
       delay(100); 
       timeElapsed = (millis() / 1000) - state.startTime;
@@ -240,9 +239,9 @@ loop()
       clearTime();
       
       startPomoBreak();
-      int current = state.startTime;
-      int timeElapsed = 0;
-      int endTime = state.endTime;
+      long current = state.startTime;
+      long timeElapsed = 0;
+      long endTime = state.endTime;
 
       while (current < endTime) {
         delay(100);
